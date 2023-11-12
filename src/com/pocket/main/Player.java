@@ -21,8 +21,6 @@ public class Player {
      * @param fightLog 战斗记录
      */
     public void calculateByLog(FightLog fightLog){
-//        int rounds = fightLog.length;
-//        int stage = getStage(rounds);
         boolean[] fightLogArr = fightLog.getLog();
         boolean preLog = fightLogArr[0];
         for(boolean fight: fightLogArr){
@@ -52,6 +50,8 @@ public class Player {
 
         // 连胜 + 基础
         money += calculateGoldBasedOnStreak(streak) + 5;
+
+        System.out.print(money + "->");
     }
 
     /**
@@ -66,7 +66,7 @@ public class Player {
         4连胜 - 2金币
         5连胜 - 3金币
          */
-        return switch (currentStreak){
+        return switch (Math.min(currentStreak, STREAK_FIVE)){
             case STREAK_TWO,STREAK_THREE -> 1;
             case STREAK_FOUR -> 2;
             case STREAK_FIVE -> 3;
@@ -89,14 +89,20 @@ public class Player {
         return rounds / 6;
     }
 
+    public void showLog(){
+
+    }
+
     public static void main(String[] args) {
-        FightLog fightLogAllWin = new FightLog(1, 1, 1, 1, 1);
-        FightLog fightLogAllLose = new FightLog(0, 0, 0, 0, 0);
+        FightLog fightLogAllWin = new FightLog(0, 0, 0, 0, 1, 0, 0, 0);
+        FightLog fightLogAllLose = new FightLog(0, 0, 0, 0, 0, 0, 0, 0);
         Player p1 = new Player(10);
-        Player p2 = new Player(20);
-        p1.calculateByLog(fightLogAllLose);
-        p2.calculateByLog(fightLogAllLose);
+        Player p2 = new Player(10);
+        p1.calculateByLog(fightLogAllWin);
+
         System.out.println(p1.money);
+        System.out.println();
+        p2.calculateByLog(fightLogAllLose);
         System.out.println(p2.money);
     }
 }
